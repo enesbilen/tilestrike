@@ -36,6 +36,7 @@ struct RootView: View {
         }
         .task {
             GameFeedback.warmUp()
+            AdMobService.shared.start()
         }
     }
 
