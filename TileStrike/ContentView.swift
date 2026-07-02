@@ -23,6 +23,11 @@ struct ContentView: View {
     @State private var didCelebrateRecord = false
     @State private var showGameOverOverlay = false
     @State private var bestScorePulseTask: Task<Void, Never>?
+    @AppStorage(AppSettings.themeKey) private var selectedTheme = GameTheme.ember.rawValue
+
+    private var theme: GameTheme {
+        GameTheme.current(rawValue: selectedTheme)
+    }
 
     var body: some View {
         GeometryReader { proxy in
@@ -31,10 +36,7 @@ struct ContentView: View {
 
             ZStack {
                 LinearGradient(
-                    colors: [
-                        Color(red: 0.07, green: 0.09, blue: 0.12),
-                        Color(red: 0.12, green: 0.16, blue: 0.17)
-                    ],
+                    colors: theme.background,
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -45,6 +47,7 @@ struct ContentView: View {
                         score: game.score,
                         bestScore: game.bestScore,
                         bestScorePulse: bestScorePulse,
+                        theme: theme,
                         onMenu: returnToMenu,
                         onReset: resetGame
                     )
@@ -67,7 +70,8 @@ struct ContentView: View {
                         previewCells: game.previewCells,
                         invalidPreviewCells: game.invalidPreviewCells,
                         lineClearCells: game.lineClearCells,
-                        previewColor: draggingPiece?.color
+                        previewColor: draggingPiece?.color,
+                        theme: theme
                     )
                         .coordinateSpace(name: "board")
                         .background(
@@ -91,6 +95,7 @@ struct ContentView: View {
                         slotSize: traySlotSize,
                         slotSpacing: GameLayout.traySlotSpacing,
                         horizontalPadding: GameLayout.trayHorizontalPadding,
+                        theme: theme,
                         onDragChanged: handleDragChanged,
                         onDragEnded: handleDragEnded
                     )
@@ -120,6 +125,7 @@ struct ContentView: View {
                         score: game.score,
                         bestScore: game.bestScore,
                         isNewRecord: gameOverWasRecord,
+                        theme: theme,
                         onPlayAgain: resetGame,
                         onMenu: returnToMenu
                     )
@@ -130,6 +136,12 @@ struct ContentView: View {
             .onChange(of: game.isGameOver) { _, isGameOver in
                 withAnimation(.spring(response: 0.42, dampingFraction: 0.86)) {
                     showGameOverOverlay = isGameOver
+                }
+                if isGameOver {
+                    Task {
+                        try? await Task.sleep(nanoseconds: 700_000_000)
+                        AdMobService.shared.showGameOverAdIfNeeded()
+                    }
                 }
             }
         }

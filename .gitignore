@@ -8,3 +8,7 @@ DerivedData/
 build/
 *.ipa
 *.xcarchive
+
+AppStoreScreenshots/
+AppStoreScreenshots-iPad-13/
+scripts/

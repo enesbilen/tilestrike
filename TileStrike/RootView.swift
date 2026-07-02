@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum AppScreen {
-    case menu, game, scores
+    case menu, game, scores, settings
 }
 
 struct RootView: View {
@@ -16,7 +16,8 @@ struct RootView: View {
                     hasActiveGame: game.isInProgress,
                     onContinue: { go(to: .game) },
                     onNewGame: { game.reset(); go(to: .game) },
-                    onScores: { go(to: .scores) }
+                    onScores: { go(to: .scores) },
+                    onSettings: { go(to: .settings) }
                 )
                 .transition(.opacity)
 
@@ -26,6 +27,10 @@ struct RootView: View {
 
             case .scores:
                 ScoreHistoryView(onDismiss: { go(to: .menu) })
+                    .transition(.opacity)
+
+            case .settings:
+                SettingsView(onDismiss: { go(to: .menu) })
                     .transition(.opacity)
             }
         }

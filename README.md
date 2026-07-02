@@ -1,6 +1,6 @@
 # TileStrike
 
-TileStrike, oyuncunun alttaki parcalari panoya yerlestirerek satir ve sutunlari patlattigi native iOS blok bulmaca oyunudur.
+TileStrike, oyuncunun alttaki parcalari panoya yerlestirerek satir ve sutunlari patlattigi native iOS blok bulmaca oyunudur. Klasik oynanisa ek olarak Bomb Rush, Zen ve Magnet modlariyla farkli stratejiler sunar.
 
 ## Oynanis
 
@@ -10,6 +10,9 @@ TileStrike, oyuncunun alttaki parcalari panoya yerlestirerek satir ve sutunlari 
 - Tamamlanan satir veya sutunlar patlar ve puan verir.
 - Arka arkaya patlatma kombo puani kazandirir.
 - Bomba parcasi dogru anda kullanildiginda cevresindeki alanlari temizler.
+- Bomb Rush modunda bombalar daha sik gelir ve cizgi temizleme puani artar.
+- Zen modunda hamle kalmadiginda kurtarici tekli parca gelebilir.
+- Magnet modunda cizgi temizlendikten sonra kalan bloklar merkeze dogru toplanir.
 - Hamle kalmazsa oyun biter, rekor cihazda saklanir.
 
 ## Ozellikler
@@ -18,6 +21,9 @@ TileStrike, oyuncunun alttaki parcalari panoya yerlestirerek satir ve sutunlari 
 - Dinamik pano ve secim kutusu yerlesimi
 - Haptic feedback
 - Oyun sesleri
+- Ses ve titresim ayarlari
+- Klasik, Neon ve Ocean tema secenekleri
+- Klasik, Bomb Rush, Zen ve Magnet oyun modlari
 - Skor gecmisi
 - App Store icin hazir ekran goruntuleri
 

@@ -4,6 +4,7 @@ struct ScoreHeaderView: View {
     let score: Int
     let bestScore: Int
     let bestScorePulse: Bool
+    let theme: GameTheme
     let onMenu: () -> Void
     let onReset: () -> Void
 
@@ -27,12 +28,12 @@ struct ScoreHeaderView: View {
             VStack(alignment: .trailing, spacing: 4) {
                 Text("\(score)")
                     .font(.system(size: 28, weight: .heavy, design: .rounded))
-                    .foregroundStyle(Color(red: 1.00, green: 0.80, blue: 0.34))
+                    .foregroundStyle(theme.accent)
                 Text("Rekor \(bestScore)")
                     .font(.caption.weight(.bold))
-                    .foregroundStyle(bestScorePulse ? Color(red: 1.0, green: 0.82, blue: 0.28) : .white.opacity(0.62))
+                    .foregroundStyle(bestScorePulse ? theme.accent : .white.opacity(0.62))
                     .scaleEffect(bestScorePulse ? 1.13 : 1)
-                    .shadow(color: Color(red: 1.0, green: 0.70, blue: 0.20).opacity(bestScorePulse ? 0.70 : 0), radius: 10)
+                    .shadow(color: theme.accent.opacity(bestScorePulse ? 0.70 : 0), radius: 10)
             }
 
             Button(action: onReset) {
@@ -51,6 +52,7 @@ struct GameOverOverlayView: View {
     let score: Int
     let bestScore: Int
     let isNewRecord: Bool
+    let theme: GameTheme
     let onPlayAgain: () -> Void
     let onMenu: () -> Void
 
@@ -63,7 +65,7 @@ struct GameOverOverlayView: View {
                 VStack(spacing: 8) {
                     Text(isNewRecord ? "Yeni Rekor!" : "Oyun Bitti")
                         .font(.system(size: 34, weight: .black, design: .rounded))
-                        .foregroundStyle(isNewRecord ? Color(red: 1.0, green: 0.82, blue: 0.30) : .white)
+                        .foregroundStyle(isNewRecord ? theme.accent : .white)
 
                     Text("Skor \(score)")
                         .font(.system(size: 24, weight: .heavy, design: .rounded))
@@ -78,15 +80,12 @@ struct GameOverOverlayView: View {
                     Button(action: onPlayAgain) {
                         Label("Tekrar Oyna", systemImage: "play.fill")
                             .font(.headline.weight(.heavy))
-                            .foregroundStyle(Color(red: 0.08, green: 0.10, blue: 0.13))
+                            .foregroundStyle(theme.buttonText)
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 15)
                             .background(
                                 LinearGradient(
-                                    colors: [
-                                        Color(red: 1.0, green: 0.82, blue: 0.32),
-                                        Color(red: 1.0, green: 0.62, blue: 0.22)
-                                    ],
+                                    colors: theme.buttonGradient,
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 ),
@@ -132,6 +131,12 @@ struct GameBoardView: View {
     let invalidPreviewCells: Set<GridPoint>
     let lineClearCells: Set<GridPoint>
     let previewColor: Color?
+    let theme: GameTheme
+    @AppStorage(AppSettings.blockStyleKey) private var selectedBlockStyle = BlockStyle.classic.rawValue
+
+    private var blockStyle: BlockStyle {
+        BlockStyle.current(rawValue: selectedBlockStyle)
+    }
 
     var body: some View {
         VStack(spacing: layout.spacing) {
@@ -140,8 +145,7 @@ struct GameBoardView: View {
                     ForEach(0..<columns, id: \.self) { col in
                         let point = GridPoint(row: row, col: col)
                         let isClearing = lineClearCells.contains(point)
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(cellColor(at: point))
+                        cellView(at: point)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(.white.opacity(previewCells.contains(point) ? 0.8 : 0.08), lineWidth: 1)
@@ -163,10 +167,28 @@ struct GameBoardView: View {
         }
         .padding(layout.padding)
         .frame(width: layout.size.width, height: layout.size.height)
-        .background(Color.white.opacity(0.07), in: RoundedRectangle(cornerRadius: 22))
+        .background(Color.white.opacity(theme.panelOpacity), in: RoundedRectangle(cornerRadius: 22))
         .overlay {
             RoundedRectangle(cornerRadius: 22)
                 .stroke(.white.opacity(0.14), lineWidth: 1)
+        }
+    }
+
+    @ViewBuilder
+    private func cellView(at point: GridPoint) -> some View {
+        let color = cellColor(at: point)
+
+        if shouldUseBlockStyle(at: point) {
+            BlockSurfaceView(
+                color: color,
+                style: blockStyle,
+                cornerRadius: 8,
+                side: layout.blockSide
+            )
+        } else {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(color)
+                .frame(width: layout.blockSide, height: layout.blockSide)
         }
     }
 
@@ -180,10 +202,26 @@ struct GameBoardView: View {
         }
 
         guard board.indices.contains(point.row), board[point.row].indices.contains(point.col) else {
-            return Color.white.opacity(0.08)
+            return theme.emptyCell
         }
 
-        return board[point.row][point.col] ?? Color.white.opacity(0.08)
+        return board[point.row][point.col] ?? theme.emptyCell
+    }
+
+    private func shouldUseBlockStyle(at point: GridPoint) -> Bool {
+        if invalidPreviewCells.contains(point) {
+            return false
+        }
+
+        if previewCells.contains(point) {
+            return true
+        }
+
+        guard board.indices.contains(point.row), board[point.row].indices.contains(point.col) else {
+            return false
+        }
+
+        return board[point.row][point.col] != nil
     }
 }
 
@@ -194,6 +232,7 @@ struct PieceTrayView: View {
     let slotSize: CGSize
     let slotSpacing: CGFloat
     let horizontalPadding: CGFloat
+    let theme: GameTheme
     let onDragChanged: (BlockPiece, DragGesture.Value) -> Void
     let onDragEnded: (BlockPiece, DragGesture.Value) -> Void
 
@@ -214,7 +253,7 @@ struct PieceTrayView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(horizontalPadding)
-        .background(.white.opacity(0.08), in: RoundedRectangle(cornerRadius: 18))
+        .background(.white.opacity(theme.panelOpacity), in: RoundedRectangle(cornerRadius: 18))
         .overlay {
             RoundedRectangle(cornerRadius: 18)
                 .stroke(.white.opacity(0.13), lineWidth: 1)

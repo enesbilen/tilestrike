@@ -40,6 +40,11 @@ struct BlockPieceView: View {
     let piece: BlockPiece
     let layout: PieceLayout
     var isFloating = false
+    @AppStorage(AppSettings.blockStyleKey) private var selectedBlockStyle = BlockStyle.classic.rawValue
+
+    private var blockStyle: BlockStyle {
+        BlockStyle.current(rawValue: selectedBlockStyle)
+    }
 
     var body: some View {
         let radius = min(layout.cellSide * 0.22, isFloating ? 8 : 5)
@@ -61,13 +66,12 @@ struct BlockPieceView: View {
         if piece.isBomb {
             BombBlockView(side: layout.cellSide, radius: radius, isFloating: isFloating)
         } else {
-            RoundedRectangle(cornerRadius: radius)
-                .fill(piece.color)
-                .overlay {
-                    RoundedRectangle(cornerRadius: radius)
-                        .stroke(.white.opacity(0.22), lineWidth: 1)
-                }
-                .frame(width: layout.cellSide, height: layout.cellSide)
+            BlockSurfaceView(
+                color: piece.color,
+                style: blockStyle,
+                cornerRadius: radius,
+                side: layout.cellSide
+            )
         }
     }
 }

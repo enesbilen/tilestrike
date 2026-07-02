@@ -21,6 +21,7 @@ final class GameSound {
     }
 
     func play(_ effect: Effect) {
+        guard AppSettings.isSoundEnabled else { return }
         guard let player = players[effect] else { return }
 
         player.currentTime = 0

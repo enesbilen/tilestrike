@@ -5,8 +5,19 @@ struct MainMenuView: View {
     let onContinue: () -> Void
     let onNewGame: () -> Void
     let onScores: () -> Void
+    let onSettings: () -> Void
 
     @AppStorage("bestScore") private var bestScore = 0
+    @AppStorage(AppSettings.themeKey) private var selectedTheme = GameTheme.ember.rawValue
+    @AppStorage(AppSettings.gameModeKey) private var selectedGameMode = GameMode.classic.rawValue
+
+    private var theme: GameTheme {
+        GameTheme.current(rawValue: selectedTheme)
+    }
+
+    private var mode: GameMode {
+        GameMode.current(rawValue: selectedGameMode)
+    }
 
     var body: some View {
         ZStack {
@@ -42,10 +53,22 @@ struct MainMenuView: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.white.opacity(0.55))
 
+                    Label(mode.title, systemImage: mode.iconName)
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(theme.accent)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
+                        .background(.black.opacity(0.22), in: Capsule())
+                        .overlay {
+                            Capsule()
+                                .stroke(theme.accent.opacity(0.30), lineWidth: 1)
+                        }
+                        .padding(.top, 4)
+
                     if bestScore > 0 {
                         Text("Rekor \(bestScore)")
                             .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundStyle(Color(red: 1.0, green: 0.80, blue: 0.34))
+                            .foregroundStyle(theme.accent)
                             .padding(.top, 6)
                     }
                 }
@@ -57,15 +80,12 @@ struct MainMenuView: View {
                         Button(action: onContinue) {
                             Label("Devam Et", systemImage: "play.fill")
                                 .font(.title3.weight(.heavy))
-                                .foregroundStyle(Color(red: 0.08, green: 0.10, blue: 0.13))
+                                .foregroundStyle(theme.buttonText)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .background(
                                     LinearGradient(
-                                        colors: [
-                                            Color(red: 1.0, green: 0.82, blue: 0.32),
-                                            Color(red: 1.0, green: 0.62, blue: 0.22)
-                                        ],
+                                        colors: theme.buttonGradient,
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
@@ -91,15 +111,12 @@ struct MainMenuView: View {
                         Button(action: onNewGame) {
                             Label("Oyna", systemImage: "play.fill")
                                 .font(.title3.weight(.heavy))
-                                .foregroundStyle(Color(red: 0.08, green: 0.10, blue: 0.13))
+                                .foregroundStyle(theme.buttonText)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 16)
                                 .background(
                                     LinearGradient(
-                                        colors: [
-                                            Color(red: 1.0, green: 0.82, blue: 0.32),
-                                            Color(red: 1.0, green: 0.62, blue: 0.22)
-                                        ],
+                                        colors: theme.buttonGradient,
                                         startPoint: .topLeading,
                                         endPoint: .bottomTrailing
                                     ),
@@ -122,6 +139,20 @@ struct MainMenuView: View {
                             }
                     }
                     .accessibilityLabel("Skor geçmişini görüntüle")
+
+                    Button(action: onSettings) {
+                        Label("Ayarlar", systemImage: "gearshape.fill")
+                            .font(.headline.weight(.bold))
+                            .foregroundStyle(.white.opacity(0.80))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .background(.white.opacity(0.09), in: RoundedRectangle(cornerRadius: 16))
+                            .overlay {
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.white.opacity(0.14), lineWidth: 1)
+                            }
+                    }
+                    .accessibilityLabel("Ayarları aç")
                 }
                 .padding(.horizontal, 32)
                 .padding(.bottom, 56)

@@ -17,6 +17,10 @@ final class GameModel: ObservableObject {
     private var bombSpawnState = GameRules.BombSpawnState()
     private var lineClearAnimationID = UUID()
 
+    private var currentMode: GameMode {
+        AppSettings.currentGameMode
+    }
+
     var isInProgress: Bool {
         !isGameOver && score > 0
     }
@@ -48,7 +52,7 @@ final class GameModel: ObservableObject {
         bombSpawnState.reset()
         choices = randomChoices()
         isGameOver = false
-        message = "Yeni oyun başladı"
+        message = currentMode.startMessage
         clearLineClearHighlight()
         clearPreview()
     }
@@ -123,7 +127,11 @@ final class GameModel: ObservableObject {
 
         score += GameRules.placementScore(for: piece, boardRows: boardRows, boardColumns: boardColumns)
         updateBestScore()
-        clearCompletedLinesIfNeeded()
+        let clearedLines = clearCompletedLinesIfNeeded()
+        if clearedLines && currentMode == .magnet {
+            boardState.compactRowsTowardCenter()
+            message = "Magnet alanı blokları topladı"
+        }
         choices.removeAll { $0.id == piece.id }
 
         var nextChoicesArePlayable = false
@@ -133,7 +141,9 @@ final class GameModel: ObservableObject {
             message = nextChoicesArePlayable ? "Kurtarıcı tekli parça geldi" : "Yeni 4 parça geldi"
         }
 
-        if nextChoicesArePlayable {
+        let zenRescueWasApplied = applyZenRescueIfNeeded()
+
+        if nextChoicesArePlayable || zenRescueWasApplied {
             updateGameOverState(hasAvailableMove: true)
         } else {
             refreshGameOverState()
@@ -152,11 +162,11 @@ final class GameModel: ObservableObject {
         boardState.canPlace(piece, at: origin)
     }
 
-    private func clearCompletedLinesIfNeeded() {
+    private func clearCompletedLinesIfNeeded() -> Bool {
         let clearResult = boardState.clearCompletedLines()
         guard clearResult.count > 0 else {
             combo = 0
-            return
+            return false
         }
 
         showLineClearHighlight(clearResult.cells)
@@ -164,11 +174,13 @@ final class GameModel: ObservableObject {
         score += GameRules.lineClearScore(
             clearedLines: clearResult.count,
             combo: combo,
+            mode: currentMode,
             boardRows: boardRows,
             boardColumns: boardColumns
         )
         updateBestScore()
         message = combo > 1 ? "Kombo x\(combo)! \(clearResult.count) çizgi patladı" : "\(clearResult.count) çizgi patladı"
+        return true
     }
 
     private func updateBestScore() {
@@ -200,6 +212,20 @@ final class GameModel: ObservableObject {
         return false
     }
 
+    private func applyZenRescueIfNeeded() -> Bool {
+        guard currentMode == .zen else { return false }
+        guard !hasAnyMove(), boardState.firstEmptyCell() != nil else { return false }
+
+        if choices.isEmpty {
+            choices = [PieceLibrary.singleRescuePiece()]
+        } else {
+            choices[0] = PieceLibrary.singleRescuePiece()
+        }
+
+        message = "Zen kurtarıcı parça verdi"
+        return true
+    }
+
     private func refreshGameOverState() {
         updateGameOverState(hasAvailableMove: hasAnyMove())
     }
@@ -212,6 +238,7 @@ final class GameModel: ObservableObject {
         PieceLibrary.randomChoices(
             count: choiceCount,
             score: score,
+            mode: currentMode,
             bombSpawnState: &bombSpawnState
         )
     }

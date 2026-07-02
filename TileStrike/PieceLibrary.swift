@@ -1,14 +1,9 @@
 import SwiftUI
 
 enum PieceLibrary {
-    static let palette: [Color] = [
-        Color(red: 0.20, green: 0.78, blue: 0.70),
-        Color(red: 0.97, green: 0.42, blue: 0.38),
-        Color(red: 1.00, green: 0.75, blue: 0.30),
-        Color(red: 0.40, green: 0.58, blue: 0.98),
-        Color(red: 0.66, green: 0.50, blue: 0.98),
-        Color(red: 0.47, green: 0.83, blue: 0.42)
-    ]
+    static var palette: [Color] {
+        AppSettings.currentTheme.palette
+    }
 
     private static let templates: [[GridPoint]] = [
         [GridPoint(row: 0, col: 0)],
@@ -26,12 +21,13 @@ enum PieceLibrary {
     static func randomChoices(
         count: Int,
         score: Int,
+        mode: GameMode,
         bombSpawnState: inout GameRules.BombSpawnState
     ) -> [BlockPiece] {
         guard count > 0 else { return [] }
 
         let shuffledPalette = palette.shuffled()
-        let bombIndex = GameRules.shouldSpawnBomb(score: score, state: &bombSpawnState)
+        let bombIndex = GameRules.shouldSpawnBomb(score: score, mode: mode, state: &bombSpawnState)
             ? Int.random(in: 0..<count)
             : nil
         var colorIndex = 0

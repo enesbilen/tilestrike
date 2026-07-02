@@ -4,14 +4,16 @@ struct ScoreHistoryView: View {
     let onDismiss: () -> Void
 
     private let entries = ScoreHistory.shared.entries
+    @AppStorage(AppSettings.themeKey) private var selectedTheme = GameTheme.ember.rawValue
+
+    private var theme: GameTheme {
+        GameTheme.current(rawValue: selectedTheme)
+    }
 
     var body: some View {
         ZStack {
             LinearGradient(
-                colors: [
-                    Color(red: 0.07, green: 0.09, blue: 0.12),
-                    Color(red: 0.12, green: 0.16, blue: 0.17)
-                ],
+                colors: theme.background,
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
@@ -46,7 +48,7 @@ struct ScoreHistoryView: View {
                     ScrollView {
                         VStack(spacing: 8) {
                             ForEach(Array(entries.enumerated()), id: \.element.id) { index, entry in
-                                ScoreRowView(rank: index + 1, entry: entry, isBest: index == 0)
+                                ScoreRowView(rank: index + 1, entry: entry, isBest: index == 0, theme: theme)
                             }
                         }
                         .padding(.horizontal, 18)
@@ -62,19 +64,18 @@ private struct ScoreRowView: View {
     let rank: Int
     let entry: ScoreEntry
     let isBest: Bool
-
-    private let gold = Color(red: 1.0, green: 0.80, blue: 0.34)
+    let theme: GameTheme
 
     var body: some View {
         HStack(spacing: 12) {
             Text("#\(rank)")
                 .font(.system(size: 14, weight: .bold, design: .rounded))
-                .foregroundStyle(isBest ? gold : .white.opacity(0.36))
+                .foregroundStyle(isBest ? theme.accent : .white.opacity(0.36))
                 .frame(width: 30, alignment: .leading)
 
             Text("\(entry.score)")
                 .font(.system(size: 22, weight: .heavy, design: .rounded))
-                .foregroundStyle(isBest ? gold : .white)
+                .foregroundStyle(isBest ? theme.accent : .white)
 
             Spacer()
 
@@ -88,7 +89,7 @@ private struct ScoreRowView: View {
         .overlay {
             if isBest {
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(gold.opacity(0.30), lineWidth: 1)
+                    .stroke(theme.accent.opacity(0.30), lineWidth: 1)
             }
         }
     }

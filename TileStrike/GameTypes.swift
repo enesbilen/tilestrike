@@ -123,6 +123,22 @@ struct BoardState {
         }
     }
 
+    mutating func compactRowsTowardCenter() {
+        for row in 0..<rows {
+            let occupiedColors = cells[row].compactMap { $0 }
+            guard !occupiedColors.isEmpty, occupiedColors.count < columns else { continue }
+
+            var nextRow = Array<Color?>(repeating: nil, count: columns)
+            let startColumn = max(0, (columns - occupiedColors.count) / 2)
+
+            for (offset, color) in occupiedColors.enumerated() {
+                nextRow[startColumn + offset] = color
+            }
+
+            cells[row] = nextRow
+        }
+    }
+
     mutating func clearCompletedLines() -> LineClearResult {
         let rowsToClear = (0..<rows).filter { row in
             cells[row].allSatisfy { $0 != nil }

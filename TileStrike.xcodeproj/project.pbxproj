@@ -25,6 +25,13 @@
 		1A2B3C4D5E6F700100000035 /* MainMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000034 /* MainMenuView.swift */; };
 		1A2B3C4D5E6F700100000037 /* ScoreHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000036 /* ScoreHistoryView.swift */; };
 		1A2B3C4D5E6F700100000039 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000038 /* PrivacyInfo.xcprivacy */; };
+		1A2B3C4D5E6F70010000003B /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70010000003A /* AppSettings.swift */; };
+		1A2B3C4D5E6F70010000003D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70010000003C /* SettingsView.swift */; };
+		1A2B3C4D5E6F70010000003F /* GameTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F70010000003E /* GameTheme.swift */; };
+		1A2B3C4D5E6F700100000041 /* GameMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000040 /* GameMode.swift */; };
+		1A2B3C4D5E6F700100000043 /* BlockStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000042 /* BlockStyle.swift */; };
+		1A2B3C4D5E6F700100000045 /* AdMobService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F700100000044 /* AdMobService.swift */; };
+		1A2B3C4D5E6F700100000047 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = 1A2B3C4D5E6F700100000046 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +54,12 @@
 		1A2B3C4D5E6F700100000034 /* MainMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700100000036 /* ScoreHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreHistoryView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F700100000038 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70010000003A /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70010000003C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F70010000003E /* GameTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTheme.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700100000040 /* GameMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMode.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700100000042 /* BlockStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockStyle.swift; sourceTree = "<group>"; };
+		1A2B3C4D5E6F700100000044 /* AdMobService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdMobService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B3C4D5E6F700100000047 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,8 +98,14 @@
 				1A2B3C4D5E6F700100000014 /* BlockPieceView.swift */,
 				1A2B3C4D5E6F700100000030 /* ScoreHistory.swift */,
 				1A2B3C4D5E6F700100000032 /* RootView.swift */,
+				1A2B3C4D5E6F70010000003A /* AppSettings.swift */,
+				1A2B3C4D5E6F70010000003E /* GameTheme.swift */,
+				1A2B3C4D5E6F700100000040 /* GameMode.swift */,
+				1A2B3C4D5E6F700100000042 /* BlockStyle.swift */,
+				1A2B3C4D5E6F700100000044 /* AdMobService.swift */,
 				1A2B3C4D5E6F700100000034 /* MainMenuView.swift */,
 				1A2B3C4D5E6F700100000036 /* ScoreHistoryView.swift */,
+				1A2B3C4D5E6F70010000003C /* SettingsView.swift */,
 				1A2B3C4D5E6F700100000038 /* PrivacyInfo.xcprivacy */,
 				1A2B3C4D5E6F70010000002B /* Assets.xcassets */,
 				1A2B3C4D5E6F70010000002F /* Sounds */,
@@ -117,6 +137,9 @@
 			dependencies = (
 			);
 			name = TileStrike;
+			packageProductDependencies = (
+				1A2B3C4D5E6F700100000046 /* GoogleMobileAds */,
+			);
 			productName = TileStrike;
 			productReference = 1A2B3C4D5E6F700100000005 /* TileStrike.app */;
 			productType = "com.apple.product-type.application";
@@ -145,6 +168,9 @@
 				Base,
 			);
 			mainGroup = 1A2B3C4D5E6F700100000007;
+			packageReferences = (
+				1A2B3C4D5E6F700100000048 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+			);
 			productRefGroup = 1A2B3C4D5E6F700100000009 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -185,8 +211,14 @@
 				1A2B3C4D5E6F700100000018 /* GameScreenSections.swift in Sources */,
 				1A2B3C4D5E6F700100000031 /* ScoreHistory.swift in Sources */,
 				1A2B3C4D5E6F700100000033 /* RootView.swift in Sources */,
+				1A2B3C4D5E6F70010000003B /* AppSettings.swift in Sources */,
 				1A2B3C4D5E6F700100000035 /* MainMenuView.swift in Sources */,
 				1A2B3C4D5E6F700100000037 /* ScoreHistoryView.swift in Sources */,
+				1A2B3C4D5E6F70010000003D /* SettingsView.swift in Sources */,
+				1A2B3C4D5E6F70010000003F /* GameTheme.swift in Sources */,
+				1A2B3C4D5E6F700100000041 /* GameMode.swift in Sources */,
+				1A2B3C4D5E6F700100000043 /* BlockStyle.swift in Sources */,
+				1A2B3C4D5E6F700100000045 /* AdMobService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,10 +345,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 955ULV5ZU2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = TileStrike;
+				INFOPLIST_KEY_GADApplicationIdentifier = "ca-app-pub-1773816265483184~8718801105";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -343,10 +376,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = 955ULV5ZU2;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = TileStrike;
+				INFOPLIST_KEY_GADApplicationIdentifier = "ca-app-pub-1773816265483184~8718801105";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -392,6 +426,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1A2B3C4D5E6F700100000048 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1A2B3C4D5E6F700100000046 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1A2B3C4D5E6F700100000048 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1A2B3C4D5E6F70010000000E /* Project object */;
 }
